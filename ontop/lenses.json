@@ -1,0 +1,132 @@
+{
+  "relations": [
+    {
+      "name": [
+        "lenses",
+        "move"
+      ],
+      "baseRelation": [
+        "postgis",
+        "public",
+        "movement"
+      ],
+      "columns": {
+        "added": [{
+          "name": "wkt",
+          "expression": "st_astext(geometry)" },
+          {
+          "name": "wkt_geom",
+          "expression": "st_astext(st_geometryfromtext(geometry_string))" }
+        ],
+        "hidden":[]
+      },
+      "uniqueConstraints": {
+        "added": [
+          {
+            "name": "uc0",
+            "determinants": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "nonNullConstraints": {
+        "added": [
+          "id","geometry","thing_id","dt","speed_mph","wkt"
+        ]
+      },
+      "iriSafeConstraints": {
+        "added": [
+          "id"
+        ]
+      },
+      "type": "BasicLens"
+    },
+    {
+      "name": [
+        "lenses",
+        "move_report"
+      ],
+      "baseRelation": [
+        "postgis",
+        "public",
+        "movement_report"
+      ],
+      "columns": {
+        "added": [{
+          "name": "wkt",
+          "expression": "st_astext(geometry)" },
+          {
+          "name": "wkt_fromjson",
+          "expression": "st_astext(ST_GeometryFromText(format('Point(%s %s)', json_extract(geometry_json, '$.coordinates[0]'), json_extract(geometry_json, '$.coordinates[1]'))))" },
+          {
+          "name": "wkt_geom",
+          "expression": "st_astext(st_geometryfromtext(geometry_string))" }
+        ],
+        "hidden":[]
+      },
+      "uniqueConstraints": {
+        "added": [
+          {
+            "name": "copy-uc0",
+            "determinants": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "nonNullConstraints": {
+        "added": [
+          "id","geometry","thing_id","dt","speed_mph","wkt"
+        ]
+      },
+      "iriSafeConstraints": {
+        "added": [
+          "id"
+        ]
+      },
+      "type": "BasicLens"
+    },
+    {
+      "name": [
+        "lenses",
+        "move_report_filter"
+      ],
+      "baseRelation": [
+        "postgis",
+        "public",
+        "movement_report"
+      ],
+      "filterExpression":"geometry_json is not null",
+      "columns": {
+        "added": [
+          {
+          "name": "wkt_fromjson",
+          "expression": "st_astext(ST_GeometryFromText(format('Point(%s %s)', json_extract(geometry_json, '$.coordinates[0]'), json_extract(geometry_json, '$.coordinates[1]'))))" }
+        ],
+        "hidden":[]
+      },
+      "uniqueConstraints": {
+        "added": [
+          {
+            "name": "copy0-uc0",
+            "determinants": [
+              "id"
+            ]
+          }
+        ]
+      },
+      "nonNullConstraints": {
+        "added": [
+          "id","wkt_fromjson"
+        ]
+      },
+      "iriSafeConstraints": {
+        "added": [
+          "id"
+        ]
+      },
+      "type": "BasicLens"
+    }
+  ]
+}

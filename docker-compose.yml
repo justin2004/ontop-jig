@@ -1,0 +1,62 @@
+services:
+  trino:
+    image: trinodb/trino:470
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '12.0'
+    container_name: trino
+    privileged: true
+    environment:
+      - DISCOVERY_URI=http://trino:8080
+      - COORDINATOR=true
+    ports:
+      - "8080:8080"
+      # - "7888:7888"
+      # - "9091:9091"
+      - "9081:9081"
+    volumes:
+      - type: bind
+        source: ./trino/config/config.properties
+        target: /etc/trino/config.properties
+        consistency: consistent
+      - ./trino/config/catalog:/etc/trino/catalog
+    healthcheck:
+      test: ["CMD-SHELL", "bash", "-c","curl http://localhost:8080/v1/info | grep 'starting\":false" ]
+    depends_on:
+      postgis:
+        condition: service_healthy
+
+  postgis:
+    image: postgis/postgis:17-3.5
+    container_name: postgis
+    volumes:
+      - ./init-scripts/11-postgis-movement-data.sql:/docker-entrypoint-initdb.d/11-postgis-movement-data.sql
+      - type: bind
+        source: ./static_data/
+        target: /static_data/
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready","-U","postgres", "-d", "postgres"]
+
+  ontop:
+    build: ontop
+    container_name: ontop
+    environment:
+      container_name: ontop
+      ONTOP_DEV_MODE: "true"
+      ONTOP_LOG_LEVEL: "DEBUG"
+    ports:
+      - "8083:8080"
+      - "9093:9092"
+    volumes:
+      - type: bind
+        source: ./ontop
+        target: /src
+    command: /src/entry.sh
+    depends_on:
+      trino:
+        condition: service_started

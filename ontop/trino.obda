@@ -1,0 +1,39 @@
+[PrefixDeclaration]
+rdf:		http://www.w3.org/1999/02/22-rdf-syntax-ns#
+rdfs:		http://www.w3.org/2000/01/rdf-schema#
+owl:		http://www.w3.org/2002/07/owl#
+:		    http://vkg.teamraft.com/
+ex:		    http://vkg.teamraft.com/ex/
+cco:		http://www.ontologyrepository.com/CommonCoreOntologies/
+bfo:		http://purl.obolibrary.org/obo/
+xsd:		http://www.w3.org/2001/XMLSchema#
+obda:		https://w3id.org/obda/vocabulary#
+geo:		http://www.opengis.net/ont/geosparql#
+
+[MappingDeclaration] @collection [[
+
+
+
+; mappingId MAP-0
+; target :observation/{id} a cco:ActOfObservation ; bfo:exists_at :observation/{id}/tr ;  cco:has_object :observation/{id}/motion ; cco:has_agent :thing/{thing_id} . :observation/{id}/motion a cco:ActOfMotion ; bfo:occurs_in :observation/{id}/motion/spatialregion ; cco:has_agent :thing/{thing_id}  . :thing/{thing_id} a cco:Vehicle ; cco:designated_by :thing/{thing_id}/name . :thing/{thing_id}/name cco:has_text_value {thing_id}^^xsd:string . :observation/{id}/tr a bfo:temporal_region ; bfo:has_last_instant :observation/{id}/tr/ti . :observation/{id}/tr/ti a bfo:temporal_instant ; cco:has_date_value {dt}^^xsd:dateTime . :observation/{id}/motion/spatialregion a cco:GeospatialRegion ; geo:asWKT {wkt_geom}^^geo:wktLiteral .
+; source select id, thing_id, wkt, wkt_geom, dt  from lenses.move ;
+
+; mappingId MAP-1
+; target :observation_report/{id} a cco:ActOfObservation ; bfo:exists_at :observation_report/{id}/tr ;  cco:has_object :observation_report/{id}/motion . :observation_report/{id}/motion a cco:ActOfMotion ; bfo:occurs_in :observation_report/{id}/motion/spatialregion ; cco:has_agent :thing/{target_thing_id}  . :thing/{target_thing_id} a cco:Vehicle ; cco:designated_by :thing/{target_thing_id}/name . :thing/{target_thing_id}/name cco:has_text_value {target_thing_id}^^xsd:string . :observation_report/{id}/tr a bfo:temporal_region ; bfo:has_last_instant :observation_report/{id}/tr/ti . :observation_report/{id}/tr/ti a bfo:temporal_instant ; cco:has_date_value {dt}^^xsd:dateTime . 
+; source select id, target_thing_id, wkt, wkt_geom, dt  from lenses.move_report ;
+
+mappingId MAP-1-handle-null-fromjson
+target :observation_report/{id}/motion/spatialregion a cco:GeospatialRegion ; geo:asWKT {wkt_fromjson}^^geo:wktLiteral .
+source select id, wkt_fromjson  from lenses.move_report_filter ;
+
+
+mappingId MAP-100
+target :observation_report/100/{id}region geo:asWKT_works {wkt}^^geo:wktLiteral ; geo:asWKT_notworks {wkt_geom}^^geo:wktLiteral .
+source select id, wkt, wkt_geom  from lenses.move_report ;
+
+
+
+; TODO BUG  lens and base relation can't have the same table name
+
+
+]]
