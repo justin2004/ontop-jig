@@ -70,3 +70,39 @@ bind(geof:distance(?wkt,?wkt1,uom:metre) as ?dist)
 } 
 LIMIT 10
 ```
+
+
+
+## bug when lens table name and and base relation have the same last component
+
+following from the naming conventions used [here](https://ontop-vkg.org/tutorial/lenses/basic-lens.html#projection)
+
+```json
+    {
+      "name": [
+        "lenses",
+        "movement"
+      ],
+      "baseRelation": [
+        "postgis",
+        "public",
+        "movement"
+      ],
+...
+```
+
+
+```
+it.unibz.inf.ontop.exception.OntopQueryEvaluationException: java.sql.SQLException: Query failed (#20250215_014817_00009_t6wh4): line 4:68: mismatched input ';'. Expecting: ')', ',', '.', 'AS', 'CROSS', 'EXCEPT', 'FETCH', 'FOR', 'FULL', 'GROUP', 'HAVING', 'INNER', 'INTERSECT', 'JOIN', 'LEFT', 'LIMIT', 'MATCH_RECOGNIZE', 'NATURAL', 'OFFSET', 'ORDER', 'RIGHT', 'TABLESAMPLE', 'UNION', 'WHERE', 'WINDOW', <identifier>
+```
+
+```sparql
+PREFIX uom: <http://www.opengis.net/def/uom/OGC/1.0/>
+PREFIX geof: <http://www.opengis.net/def/function/geosparql/>
+PREFIX geo: <http://www.opengis.net/ont/geosparql#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+SELECT * WHERE {
+ ?s ?p ?o .
+} 
+```
