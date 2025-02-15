@@ -1,5 +1,16 @@
 # ontop jig (for testing ontop)
 
+## setup
+
+- have docker and docker-compose installed
+  - the command on your machine can be `docker compose` or `docker-compose`
+- run `docker-compose up -d ; docker-compose logs --follow`
+- browse to `http://127.0.0.1:8083/`
+
+## tear down
+
+- run `docker-compose down ; docker-compose rm`
+
 ## works as expected
 
 ```sparql
