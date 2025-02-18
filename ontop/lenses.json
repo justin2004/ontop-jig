@@ -102,7 +102,13 @@
         "added": [
           {
           "name": "wkt_fromjson",
-          "expression": "st_astext(ST_GeometryFromText(format('Point(%s %s)', json_extract(geometry_json, '$.coordinates[0]'), json_extract(geometry_json, '$.coordinates[1]'))))" }
+          "expression": "st_astext(ST_GeometryFromText(format('Point(%s %s)', json_extract(geometry_json, '$.coordinates[0]'), json_extract(geometry_json, '$.coordinates[1]'))))" },
+          {
+          "name": "wkt_geog",
+          "expression": "st_astext(to_geometry(to_spherical_geography(ST_GeometryFromText(format('Point(%s %s)', json_extract(geometry_json, '$.coordinates[0]'), json_extract(geometry_json, '$.coordinates[1]'))))))" },
+          {
+          "name": "wkt_geog_notext",
+          "expression": "to_spherical_geography(ST_GeometryFromText(format('Point(%s %s)', json_extract(geometry_json, '$.coordinates[0]'), json_extract(geometry_json, '$.coordinates[1]'))))" }
         ],
         "hidden":[]
       },

@@ -23,12 +23,12 @@ geo:		http://www.opengis.net/ont/geosparql#
 ; source select id, target_thing_id, wkt, wkt_geom, dt  from lenses.move_report ;
 
 mappingId MAP-1-handle-null-fromjson
-target :observation_report/{id}/motion/spatialregion a cco:GeospatialRegion ; geo:asWKT {wkt_fromjson}^^geo:wktLiteral .
-source select id, wkt_fromjson  from lenses.move_report_filter ;
+target :observation_report/{id}/motion/spatialregion a cco:GeospatialRegion ; geo:asWKT {wkt_fromjson}^^geo:wktLiteral  ; geo:asWKT_geog {wkt_geog}^^geo:wktLiteral .
+source select id, wkt_fromjson, wkt_geog  from lenses.move_report_filter ;
 
 
 mappingId MAP-100
-target :observation_report/100/{id}region geo:asWKT_works {wkt}^^geo:wktLiteral ; geo:asWKT_notworks {wkt_geom}^^geo:wktLiteral .
+target :observation_report/100/{id}region geo:asWKT_works {wkt}^^geo:wktLiteral ; geo:asWKT_notworks {wkt_geom}^^geo:wktLiteral  .
 source select id, wkt, wkt_geom  from lenses.move_report ;
 
 
